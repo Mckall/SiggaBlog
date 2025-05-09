@@ -1,4 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using SiggaBlog.Data;
+using SiggaBlog.Services;
+using SiggaBlog.ViewModel;
+using System;
+using WebApi.Models;
 
 namespace SiggaBlog;
 
@@ -18,7 +23,12 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+        builder.Services.AddSingleton<AppDbContext>();
+        builder.Services.AddSingleton<IRepository<Post>, PostsRepository>();
+        builder.Services.AddSingleton<MainPageViewModel>();
+        builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddSingleton<PostService>();
 
-		return builder.Build();
+        return builder.Build();
 	}
 }
