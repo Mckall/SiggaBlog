@@ -1,27 +1,28 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 using SiggaBlog.Data;
 using SiggaBlog.Services;
 using SiggaBlog.ViewModel;
-using System;
 using WebApi.Models;
 
 namespace SiggaBlog;
 
 public static class MauiProgram
 {
-	public static MauiApp CreateMauiApp()
-	{
-		var builder = MauiApp.CreateBuilder();
-		builder
-			.UseMauiApp<App>()
-			.ConfigureFonts(fonts =>
-			{
-				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			});
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
         builder.Services.AddSingleton<AppDbContext>();
         builder.Services.AddSingleton<IRepository<Post>, PostsRepository>();
@@ -30,5 +31,5 @@ public static class MauiProgram
         builder.Services.AddSingleton<PostService>();
 
         return builder.Build();
-	}
+    }
 }

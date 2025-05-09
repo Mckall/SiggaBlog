@@ -39,14 +39,12 @@ public class PostService
             var jsonContent = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<List<Post>>(jsonContent) ?? new List<Post>();
 
-            return result ?? new List<Post>();
+            return result ?? [];
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Console.WriteLine($"Erro: {ex.Message}");
+            return [];
         }
-
-        return new List<Post>();
     }
 
     public async Task<List<Post>> GetLocalCachePosts()
@@ -56,7 +54,7 @@ public class PostService
 
         var localPosts = await _postRepository.GetAllAsync();
 
-        return localPosts ?? new List<Post>();
+        return localPosts ?? [];
     }
 
     public async Task AddUpdateLocalCachePosts(ObservableCollection<Post> posts)
