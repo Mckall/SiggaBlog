@@ -3,11 +3,10 @@
     x:Class="SiggaBlog.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:SiggaBlog.ViewModel">
-
-    <!--<ContentPage.BindingContext>
-        <vm:MainPageViewModel />
-    </ContentPage.BindingContext>-->
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:SiggaBlog.ViewModel"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
 
     <ContentPage.Content>
 
@@ -25,12 +24,15 @@
                 IsVisible="{Binding IsBusy, Mode=OneWay}"
                 VerticalOptions="Center" />
 
+            <RefreshView
+                Grid.Row="1"
+                Margin="8"
+                Command="{Binding RefreshCommand}"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}">
 
-            <ScrollView Grid.Row="1">
+                <CollectionView ItemsSource="{Binding Posts, Mode=OneWay}">
 
-                <VerticalStackLayout Padding="16" BindableLayout.ItemsSource="{Binding Posts, Mode=OneWay}">
-
-                    <BindableLayout.ItemTemplate>
+                    <CollectionView.ItemTemplate>
 
                         <DataTemplate>
 
@@ -49,7 +51,7 @@
                                 </Border>
 
                                 <Label
-                                    Margin="8,-16,8,0"
+                                    Margin="16,-16,16,0"
                                     FontAttributes="Bold"
                                     Style="{StaticResource Headline}"
                                     Text="{Binding Title, Mode=OneWay}"
@@ -64,11 +66,11 @@
 
                         </DataTemplate>
 
-                    </BindableLayout.ItemTemplate>
+                    </CollectionView.ItemTemplate>
 
-                </VerticalStackLayout>
+                </CollectionView>
 
-            </ScrollView>
+            </RefreshView>
 
         </Grid>
 

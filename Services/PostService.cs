@@ -52,16 +52,16 @@ public class PostService
         if (_postRepository is null)
             return new List<Post>();
 
-        var localPosts = await _postRepository.GetAllAsync();
+        var localPosts = await _postRepository.GetAllAsync().ConfigureAwait(false);
 
         return localPosts ?? [];
     }
 
     public async Task AddUpdateLocalCachePosts(ObservableCollection<Post> posts)
     {
-       if (_postRepository is null) return;
+        if (_postRepository is null) return;
 
-        await _postRepository.AddOrUpdateListAsync(posts);
+        await _postRepository.AddOrUpdateListAsync(posts).ConfigureAwait(false);
     }
     #endregion Public Methods
 }

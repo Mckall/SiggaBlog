@@ -1,15 +1,12 @@
-﻿using SiggaBlog.Data;
-using SiggaBlog.ViewModel;
-using WebApi.Models;
+﻿using SiggaBlog.ViewModel;
 
-namespace SiggaBlog
+namespace SiggaBlog;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    public MainPage(MainPageViewModel vm)
     {
-        public MainPage(MainPageViewModel vm)
-        {
-            InitializeComponent();
-            BindingContext = vm;
-        }
+        InitializeComponent();
+        BindingContext = vm;
     }
 }

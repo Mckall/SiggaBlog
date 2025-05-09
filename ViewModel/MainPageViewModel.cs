@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Mvvm.Input;
+using MainApp.Input;
+using SiggaBlog.Commons.Permissions;
 using SiggaBlog.Data;
 using SiggaBlog.Services;
 using System.Collections.ObjectModel;
@@ -16,7 +17,19 @@ public class MainPageViewModel : BaseViewModel
     #endregion
 
     #region Properties
-    public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
+    private ObservableCollection<Post> _posts = new();
+    public ObservableCollection<Post> Posts
+    {
+        get { return _posts; }
+        set
+        {
+            if (_posts == value) return;
+            _posts = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsBusy));
+        }
+    }
+
 
     private bool _isBusy = false;
     public bool IsBusy
@@ -31,11 +44,21 @@ public class MainPageViewModel : BaseViewModel
     }
     #endregion
 
+    #region Commands
+    public ObservableCommand? RefreshCommand { get; set; }
+    #endregion
+
     #region Constructors
     public MainPageViewModel(IRepository<Post> postsRepository)
     {
         _postService = new PostService(postsRepository);
+        RefreshCommand = new ObservableCommand(OnRefresh);
         _ = this.GetPosts();
+    }
+
+    private void OnRefresh(object arg1, PermissionArgs args)
+    {
+        _ = GetPosts();
     }
     #endregion
 
@@ -57,8 +80,6 @@ public class MainPageViewModel : BaseViewModel
                 }
 
                 await this.SaveLocalCache().ConfigureAwait(false);
-
-                await Toast.Make("Lista atualizada.", ToastDuration.Short).Show();
             }
             else
             {
@@ -84,7 +105,7 @@ public class MainPageViewModel : BaseViewModel
 
         var posts = await _postService.GetLocalCachePosts();
 
-        foreach(var post in posts)
+        foreach (var post in posts)
         {
             Posts.Add(post);
         }
